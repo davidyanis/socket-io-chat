@@ -1,0 +1,13 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+  
+}
+
+button {
+    background-color: rgb(47, 255, 127);
+    border: none;
+    outline: 0;
+}
