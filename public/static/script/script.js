@@ -1,19 +1,36 @@
-$(function () {
-    var socket = io();
-    $('form').submit(function(e){
-      e.preventDefault(); // prevents page reloading
-      socket.emit('chat message', $('#m').val());
-      $('#m').val('');
-      return false;
-    });
+
+const socket = io();
+
+function sendChat(event) {
+    event.preventDefault(); // prevents page reloading
+    const getMessage = document.getElementById("m").value;
+    socket.emit('chat message', getMessage);
+};
+
 
     socket.on('chat message', function(msg){
-      $('#messages').append($('<li>').text(msg));
+        console.log(msg)
+        const messageContainer = document.getElementById("messages");
+        const linkElement = document.createElement("li")
+
+        linkElement.innerHTML = msg
+        messageContainer.appendChild(linkElement)
     });
+    
     socket.on('connected user', function() {
-      $('#messages').append($('<li>').text('user has connected'));
+        const messageContainer = document.getElementById("messages");
+        const linkElement = document.createElement("li")
+
+        linkElement.innerHTML = "Anononym user has connected."
+        messageContainer.appendChild(linkElement)
     });
     socket.on('disconnected user', function() {
-      $('#messages').append($('<li>').text('user has disconnected'));
+        const messageContainer = document.getElementById("messages");
+        const linkElement = document.createElement("li")
+
+        linkElement.innerHTML = "Anononym user has disconnected."
+        messageContainer.appendChild(linkElement)
     });
-});
+
+
+
