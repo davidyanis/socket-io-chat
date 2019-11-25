@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Socket io chat</title>
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <ul id="messages"></ul>
-    <form>
+   
+    <form onsubmit="sendChat(event)">
         <input id="m" autocomplete="off" />
-        <button>Send</button>
+        <button type="submit">Send</button>
     </form>    
+    <ul id="messages"></ul>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/static/script/script.js"></script>
 </body>
