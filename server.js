@@ -48,9 +48,11 @@ io.on('connection', function(socket){
         io.emit('typing', typing);
     });
 
-    socket.on('joke', function(responseData){
-        io.emit('joke', responseData);
+    socket.on('joke', function(joke){
+        console.log(joke);
+        io.emit('joke', joke);
     });
+
 });
 
 http.listen(1337, function(){

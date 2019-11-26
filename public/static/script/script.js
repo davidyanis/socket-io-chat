@@ -42,6 +42,14 @@ socket.on('typing', function(typing){
     }
 });
 
+socket.on('joke', function(joke){
+    const messageContainer = document.getElementById("messages");
+    const linkElement = document.createElement("li")
+
+    linkElement.innerHTML = joke
+    messageContainer.appendChild(linkElement)
+});
+
 var typing = false;
 var timeout = undefined;
 
@@ -92,15 +100,7 @@ function getGIF() {
 function getJoke() {
     axios.get('/joke')
     .then(function (response) {
-        let responseData = response.data
-        socket.on('joke', function(responseData) {
-            console.log(responseData)
-            const messageContainer = document.getElementById("messages");
-            const linkElement = document.createElement("li")
-        
-            linkElement.innerHTML = responseData
-            messageContainer.appendChild(linkElement)
-        });
+        socket.emit('joke', response.data);
     })
     .catch(function (error) {
         console.log(error);
