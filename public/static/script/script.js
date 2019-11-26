@@ -65,7 +65,6 @@ function initSite(){
     displayModal();
 }
 
-/* var chatNickName = [] */
 var modal = document.getElementById("initialtChatModal");
 var modalContent = document.getElementById("modalContent");
 
@@ -75,15 +74,24 @@ function displayModal() {
 }
 
 function saveNickname(){
-    console.log("ranj")
-    axios.post('/add')
+    let inputNickName = document.getElementById("chatUser").value;
+    if(inputNickName.length <= 2){
+        alert("Alias måste innehålla minst 3 karaktärer");
+        return
+    }
+    axios.post('/addNick', {
+        name: inputNickName
+    })
       .then(function (response) {
-        console.log(response);
+        if(response.status == 200){
+            alert(response.data);
+            modal.style.display = "none";
+            modalContent.style.display = "none";
+        }
       })
       .catch(function (error) {
-        console.log(error);
+        alert(error.response.data.message);
       });
-      console.log("dddd")
 }
 
     

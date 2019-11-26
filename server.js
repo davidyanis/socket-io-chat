@@ -1,8 +1,12 @@
 const express = require('express');
+const axios = require('axios');
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const path = require('path');
+const bodyparser = require('body-parser');
+
+app.use(bodyparser.json());
 
 app.use(express.static('public'));
 
@@ -10,27 +14,23 @@ app.get('/', function(req, res){
   res.sendFile(path.join(__dirname+'/public/static/web/index.html'));
 });
 
-app.post('/add', function(req, res){
-  console.log("david")
-});
+var chatNickName = []
 
-// var chatNickName = []
+app.post('/addNick', function (req, res) {
+  for(var i = 0; i < chatNickName.length; i++){
+    if(req.body.name == chatNickName[i].alias) {
+      res.send({ message: "Namnet är upptaget, välj något annat! 😇"}, 403);
+      return
+    }
+  }
+  chatNickName.push(
+    {
+      alias: req.body.name
+    }
+  )
+  res.send("Du har skapat ett alias");
 
-// app.post('/addnick', function (req, res) {
-//   console.log("daviddddd");
-//   /* for(var i = 0; i < chatNickName.length; i++){
-//     if(req.body.inputNickName == chatNickName[i].alias) {
-//       alert("Namnet är upptaget, välj något annat! 😇");
-//       return
-//     }
-//   }
-//   chatNickName.push(
-//     {
-//       alias: req.body.inputNickName
-//     }
-//   ) */
-//  /* res.send({}); */
-// })
+})
 
 io.on('connection', function(socket){
     console.log('a user connected');
