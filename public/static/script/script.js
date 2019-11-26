@@ -50,7 +50,17 @@ function timeoutFunction(){
     socket.emit("typing", typing);
 }
 
+const dropUpElement = document.getElementsByClassName("dropdown-menu")[0]
+
 document.getElementById("m").addEventListener("input", function() {
+    let string = document.getElementById("m").value
+    
+    if (/^[/]/.test(string) && string.length === 1) {
+        dropUpElement.className = "dropdown-menu dropup show"
+    } else {
+        dropUpElement.classList.remove("show")
+    }
+
     if(typing == false) {
         typing = true
         socket.emit("typing", typing);
@@ -60,6 +70,43 @@ document.getElementById("m").addEventListener("input", function() {
         timeout = setTimeout(timeoutFunction, 3000);
     }
 })
+
+function clearInputField() {
+    dropUpElement.classList.remove("show")
+    document.getElementById("m").value = ""
+}
+
+
+function getGIF() {
+    // axios.get('https://api.yomomma.info/')
+    // .then(function (response) {
+    // console.log(response);
+    // })
+    // .catch(function (error) {
+    // console.log(error);
+    // });
+
+    clearInputField();
+}
+
+function getJoke() {
+    axios.get('/joke')
+    .then(function (response) {
+        let responseData = response.data
+        socket.on('joke', function(responseData) {
+            console.log(responseData)
+            const messageContainer = document.getElementById("messages");
+            const linkElement = document.createElement("li")
+        
+            linkElement.innerHTML = responseData
+            messageContainer.appendChild(linkElement)
+        });
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+    clearInputField();
+}
     
 
 
