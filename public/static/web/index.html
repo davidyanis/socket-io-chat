@@ -11,24 +11,26 @@
 </head>
 <body>
     <main>
-        
         <section class="messageContainer">
             <div id="messages"></div>
-            <div id="typing"></div>
         </section>
        
         <form action="" onsubmit="sendChat(event)">
-            <div class="btn-group dropup">
+           
+            <div id="typing"></div>
+            <div class="sendMessageContainer">
+                    <div class="btn-group dropup">
                
-                <div class="dropdown-menu">
-                <!-- Dropdown menu links -->
-                    <a class="dropdown-item" onclick="getGIF()" href="#">Gif</a>
-                    <a class="dropdown-item" onclick="getJoke()" href="#">Skratta</a>
-                    <a class="dropdown-item" href="#">Lämna rum</a>
-                </div>
+                            <div class="dropdown-menu">
+                            <!-- Dropdown menu links -->
+                                <a class="dropdown-item" onclick="getGIF()" href="#">Gif</a>
+                                <a class="dropdown-item" onclick="getJoke()" href="#">Skratta</a>
+                                <a class="dropdown-item" href="#">Lämna rum</a>
+                            </div>
+                        </div>
+                <input id="m" autocomplete="off" placeholder="Skriv ett meddelande"/>
+                <button type="submit" class="btn btn-primary">Skicka</button>
             </div>
-            <input id="m" autocomplete="off" placeholder="Skriv ett meddelande"/>
-            <button type="submit" class="btn btn-primary">Skicka</button>
         </form>    
     </main>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
