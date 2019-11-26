@@ -60,6 +60,32 @@ document.getElementById("m").addEventListener("input", function() {
         timeout = setTimeout(timeoutFunction, 3000);
     }
 })
+
+function initSite(){
+    displayModal();
+}
+
+/* var chatNickName = [] */
+var modal = document.getElementById("initialtChatModal");
+var modalContent = document.getElementById("modalContent");
+
+function displayModal() {
+    modal.style.display = "block";
+    modalContent.style.display = "block";
+}
+
+function saveNickname(){
+    console.log("gergreg")
+    axios.post('http://localhost:1337/h')
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      console.log("dddd")
+}
+
     
 
 

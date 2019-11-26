@@ -7,8 +7,9 @@
     <title>Socket io chat</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
-<body>
+<body onload="initSite()">
     <main>
         
         <section class="messageContainer">
@@ -19,7 +20,18 @@
         <form action="" onsubmit="sendChat(event)">
             <input id="m" autocomplete="off" placeholder="Skriv ett meddelande"/>
             <button type="submit" class="btn btn-primary">Skicka</button>
-        </form>    
+        </form>
+        <div id="initialtChatModal">
+            <div id="modalContent">
+                <p>För att starta webbchatten skriv in ett smeknamn</p>
+                <div class="input-group mb-3">
+                    <input class="form-control" id="chatUser" type="text" name="chatUser" placeholder="Skriv in alias här" autofocus>
+                    <div class="input-group-append">
+                        <button class="btn btn-success" id="nickButton" type="button" onclick="saveNickname()">Spara</button>
+                    </div>
+                </div>  
+            </div>
+        </div>
     </main>
    
     <script src="/socket.io/socket.io.js"></script>

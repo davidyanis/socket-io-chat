@@ -10,6 +10,30 @@ app.get('/', function(req, res){
   res.sendFile(path.join(__dirname+'/public/static/web/index.html'));
 });
 
+console.log("ergerg")
+
+app.post('h', function(req, res){
+  console.log("gerg")
+});
+
+// var chatNickName = []
+
+// app.post('/addnick', function (req, res) {
+//   console.log("daviddddd");
+//   /* for(var i = 0; i < chatNickName.length; i++){
+//     if(req.body.inputNickName == chatNickName[i].alias) {
+//       alert("Namnet är upptaget, välj något annat! 😇");
+//       return
+//     }
+//   }
+//   chatNickName.push(
+//     {
+//       alias: req.body.inputNickName
+//     }
+//   ) */
+//  /* res.send({}); */
+// })
+
 io.on('connection', function(socket){
     console.log('a user connected');
 
@@ -35,3 +59,4 @@ io.on('connection', function(socket){
 http.listen(1337, function(){
   console.log('Listening on 1337');
 });
+
