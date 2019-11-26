@@ -61,9 +61,10 @@ function timeoutFunction(){
 const dropUpElement = document.getElementsByClassName("dropdown-menu")[0]
 
 document.getElementById("m").addEventListener("input", function() {
-    let string = document.getElementById("m").value
+    let messageField = document.getElementById("m").value
+    let stillTyping = messageField.length;
     
-    if (/^[/]/.test(string) && string.length === 1) {
+    if (/^[/]/.test(messageField) && messageField.length === 1) {
         dropUpElement.className = "dropdown-menu dropup show"
     } else {
         dropUpElement.classList.remove("show")
@@ -72,10 +73,14 @@ document.getElementById("m").addEventListener("input", function() {
     if(typing == false) {
         typing = true
         socket.emit("typing", typing);
-        timeout = setTimeout(timeoutFunction, 3000);
+        if (!stillTyping) {
+            timeout = setTimeout(timeoutFunction, 1000);
+        }
     } else {
-        clearTimeout(timeout);
-        timeout = setTimeout(timeoutFunction, 3000);
+        if (!stillTyping) {
+            clearTimeout(timeout);
+            timeout = setTimeout(timeoutFunction, 1000);
+        }
     }
 })
 
