@@ -10,10 +10,8 @@ app.get('/', function(req, res){
   res.sendFile(path.join(__dirname+'/public/static/web/index.html'));
 });
 
-console.log("ergerg")
-
-app.post('h', function(req, res){
-  console.log("gerg")
+app.post('/add', function(req, res){
+  console.log("david")
 });
 
 // var chatNickName = []

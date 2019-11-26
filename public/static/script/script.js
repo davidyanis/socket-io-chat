@@ -75,8 +75,8 @@ function displayModal() {
 }
 
 function saveNickname(){
-    console.log("gergreg")
-    axios.post('http://localhost:1337/h')
+    console.log("ranj")
+    axios.post('/add')
       .then(function (response) {
         console.log(response);
       })
