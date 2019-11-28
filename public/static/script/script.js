@@ -10,33 +10,37 @@ function sendChat(event) {
 };
 
 
-socket.on('chat message', function(msg){
+socket.on('chat message', function(msg, nickname){
     const messageContainer = document.getElementById("messages");
     const linkElement = document.createElement("li")
+    const pElement = document.createElement("p")
 
-    linkElement.innerHTML = msg
+    pElement.innerHTML = nickname
+    linkElement.innerHTML = " " + msg
+    messageContainer.appendChild(pElement)
     messageContainer.appendChild(linkElement)
 });
 
-socket.on('connected user', function() {
+socket.on('connected user', function(nickname) {
     const messageContainer = document.getElementById("messages");
     const linkElement = document.createElement("li")
 
-    linkElement.innerHTML = "Random user has connected."
+    linkElement.innerHTML = nickname + " har anslutit till rummet."
     messageContainer.appendChild(linkElement)
 });
-socket.on('disconnected user', function() {
+socket.on('disconnected user', function(nickname) {
     const messageContainer = document.getElementById("messages");
     const linkElement = document.createElement("li")
 
-    linkElement.innerHTML = "Random user has disconnected."
+    linkElement.innerHTML = nickname + " har lämnat rummet."
     messageContainer.appendChild(linkElement)
 });
 
-socket.on('typing', function(typing){
+
+socket.on('typing', function(typing, nickname){
     const typingContainer = document.getElementById("typing");
     if (typing) {
-        typingContainer.innerHTML = "Någon skriver...";
+        typingContainer.innerHTML = nickname + " skriver...";
     } else {
         typingContainer.innerHTML = "";
     }
@@ -73,25 +77,27 @@ function displayModal() {
     modalContent.style.display = "block";
 }
 
-function saveNickname(){
+function saveNickname(event){
+    event.preventDefault();
     let inputNickName = document.getElementById("chatUser").value;
     if(inputNickName.length <= 2){
         alert("Alias måste innehålla minst 3 karaktärer");
         return
     }
+    socket.emit('userNickName', inputNickName);
     axios.post('/addNick', {
         name: inputNickName
     })
-      .then(function (response) {
-        if(response.status == 200){
-            alert(response.data);
-            modal.style.display = "none";
-            modalContent.style.display = "none";
-        }
-      })
-      .catch(function (error) {
-        alert(error.response.data.message);
-      });
+    .then(function (response) {
+    if(response.status == 200){
+        alert(response.data);
+        modal.style.display = "none";
+        modalContent.style.display = "none";
+    }
+    })
+    .catch(function (error) {
+    alert(error.response.data.message);
+    });
 }
 
     

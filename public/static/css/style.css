@@ -31,24 +31,23 @@ button {
     outline: 0;
 }
 
-form {
-    border-top: 1px solid rgb(224, 224, 224);
-    position: absolute;
-    bottom: 0;
-    width: 90%;
-    display: flex;
-    padding: 1em;
-}
-
 #messages li {
     background-color: #EAEBEE;
     border-radius: 2em;
     color: #000;
-    margin-top: 1em;
     list-style-type: none;
     padding: 0.5em;
     padding-left: 0.8em;
     padding-right: 0.8em;
+    margin-bottom: 1em;
+
+}
+#messages p {
+    color: rgb(83, 83, 83);
+    padding: 0;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 0.9em;
 }
 
 #m {

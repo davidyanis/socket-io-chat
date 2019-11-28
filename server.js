@@ -14,6 +14,7 @@ app.get('/', function(req, res){
   res.sendFile(path.join(__dirname+'/public/static/web/index.html'));
 });
 
+var nickname;
 var chatNickName = []
 
 app.post('/addNick', function (req, res) {
@@ -35,22 +36,27 @@ app.post('/addNick', function (req, res) {
 io.on('connection', function(socket){
     console.log('a user connected');
 
-    socket.broadcast.emit('connected user');
+    
 
 
     socket.on('disconnect', function(){
         console.log('user disconnected');
-        socket.broadcast.emit('disconnected user');
+        socket.broadcast.emit('disconnected user', socket.nickname);
     });
 
+    socket.on('userNickName', function(inputNickName){
+      socket.nickname = inputNickName;
+      socket.broadcast.emit('connected user', socket.nickname);
+    })
+
     socket.on('chat message', function(msg){
-        console.log('message: ' +msg);
-        io.emit('chat message', msg);
+        console.log('message: ' +msg + socket.nickname);
+        io.emit('chat message', msg, socket.nickname);
     });
 
     socket.on('typing', function(typing){
-        console.log('Någon skriver..' + typing);
-        io.emit('typing', typing);
+        console.log('Någon skriver..' + typing + socket.nickname);
+        io.emit('typing', typing, socket.nickname);
     });
 });
 
