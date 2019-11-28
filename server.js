@@ -25,7 +25,17 @@ app.get('/joke', function(req, res){
     .catch(function (error) {
         console.error(error);
     });
-  });
+});
+
+app.get('/gif', function(req, res){
+    axios.get('https://api.tenor.com/v1/random?q=cat&key=KSA73B7YRX6Z')
+    .then(function (response) {
+        res.send(response.data.results[0].media[0].tinygif.url);
+    })
+    .catch(function (error) {
+        console.error(error);
+    });
+});
 
 io.on('connection', function(socket){
     console.log('a user connected');
@@ -45,12 +55,17 @@ io.on('connection', function(socket){
 
     socket.on('typing', function(typing){
         console.log('Någon skriver..' + typing);
-        io.emit('typing', typing);
+        socket.broadcast.emit('typing user', typing);
     });
 
     socket.on('joke', function(joke){
         console.log(joke);
         io.emit('joke', joke);
+    });
+
+    socket.on('gif', function(gif){
+        console.log(gif);
+        io.emit('gif', gif);
     });
 
 });
