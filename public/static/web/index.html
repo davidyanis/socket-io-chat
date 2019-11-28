@@ -11,15 +11,23 @@
 </head>
 <body onload="initSite()">
     <main>
-        
         <section class="messageContainer">
             <div id="messages"></div>
-            <div id="typing"></div>
         </section>
-       
         <form action="" onsubmit="sendChat(event)">
-            <input id="m" autocomplete="off" placeholder="Skriv ett meddelande"/>
-            <button type="submit" class="btn btn-primary">Skicka</button>
+            <div id="typing"></div>
+            <div class="sendMessageContainer">
+                    <div class="btn-group dropup">
+                            <div class="dropdown-menu">
+                            <!-- Dropdown menu links -->
+                                <a class="dropdown-item" onclick="getGIF()" href="#">Gif</a>
+                                <a class="dropdown-item" onclick="getJoke()" href="#">Skratta</a>
+                                <a class="dropdown-item" href="#">Lämna rum</a>
+                            </div>
+                        </div>
+                <input id="m" autocomplete="off" placeholder="Skriv ett meddelande" autofocus/>
+                <button type="submit" id="sendButton" class="btn btn-primary disabled">Skicka</button>
+            </div>
         </form>
         <div id="initialtChatModal">
             <div id="modalContent">
@@ -33,9 +41,12 @@
                     </div>  
                 </form>
             </div>
-        </div>
+        </div>    
     </main>
-   
+    
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/static/script/script.js"></script>
 </body>
