@@ -17,7 +17,6 @@ function sendChat(event) {
 };
 
 document.getElementById("m").addEventListener("input", function() {
-
     buttonStatus();
     shortCommmand();
     stillTyping();
@@ -80,13 +79,13 @@ function buttonStatus() {
 }
 
 function getGIF() {
-    // axios.get('https://api.yomomma.info/')
-    // .then(function (response) {
-    // console.log(response);
-    // })
-    // .catch(function (error) {
-    // console.log(error);
-    // });
+    axios.get('/gif')
+    .then(function (response) {
+        socket.emit('gif', response.data);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
 
     clearInputField();
 }
@@ -122,6 +121,7 @@ socket.on('connected user', function() {
 
     scrollBottom();
 });
+
 socket.on('disconnected user', function() {
     const linkElement = document.createElement("li")
 
@@ -131,7 +131,8 @@ socket.on('disconnected user', function() {
     scrollBottom();
 });
 
-socket.on('typing', function(typing){
+socket.on('typing user', function(typing){
+    console.log("ewfwefew")
     const typingContainer = document.getElementById("typing");
     if (typing) {
         typingContainer.innerHTML = "Någon skriver...";
@@ -145,6 +146,16 @@ socket.on('joke', function(joke){
 
     linkElement.innerHTML = joke
     messageContainer.appendChild(linkElement)
+
+    scrollBottom();
+});
+
+socket.on('gif', function(gif){
+    const imgElement = document.createElement("img");
+    imgElement.src = gif;
+    imgElement.style.height = "10em"
+   
+    messageContainer.appendChild(imgElement)
 
     scrollBottom();
 });
