@@ -1,5 +1,12 @@
 
 const socket = io();
+let typing = false;
+let timeout = undefined;
+const dropUpElement = document.getElementsByClassName("dropdown-menu")[0]
+const messageContainer = document.getElementById("messages");
+const sendButton = document.getElementById("sendButton")
+
+buttonStatus();
 
 function sendChat(event) {
     event.preventDefault(); // prevents page reloading
@@ -9,66 +16,21 @@ function sendChat(event) {
     return false;
 };
 
+document.getElementById("m").addEventListener("input", function() {
 
-socket.on('chat message', function(msg){
-    const messageContainer = document.getElementById("messages");
-    const linkElement = document.createElement("li")
-
-    linkElement.innerHTML = msg
-    messageContainer.appendChild(linkElement)
-});
-
-socket.on('connected user', function() {
-    const messageContainer = document.getElementById("messages");
-    const linkElement = document.createElement("li")
-
-    linkElement.innerHTML = "Random user has connected."
-    messageContainer.appendChild(linkElement)
-});
-socket.on('disconnected user', function() {
-    const messageContainer = document.getElementById("messages");
-    const linkElement = document.createElement("li")
-
-    linkElement.innerHTML = "Random user has disconnected."
-    messageContainer.appendChild(linkElement)
-});
-
-socket.on('typing', function(typing){
-    const typingContainer = document.getElementById("typing");
-    if (typing) {
-        typingContainer.innerHTML = "Någon skriver...";
-    } else {
-        typingContainer.innerHTML = "";
-    }
-});
-
-socket.on('joke', function(joke){
-    const messageContainer = document.getElementById("messages");
-    const linkElement = document.createElement("li")
-
-    linkElement.innerHTML = joke
-    messageContainer.appendChild(linkElement)
-});
-
-var typing = false;
-var timeout = undefined;
+    buttonStatus();
+    shortCommmand();
+    stillTyping();
+})
 
 function timeoutFunction(){
     typing = false;
     socket.emit("typing", typing);
 }
 
-const dropUpElement = document.getElementsByClassName("dropdown-menu")[0]
-
-document.getElementById("m").addEventListener("input", function() {
+function stillTyping() {
     let messageField = document.getElementById("m").value
     let stillTyping = messageField.length;
-    
-    if (/^[/]/.test(messageField) && messageField.length === 1) {
-        dropUpElement.className = "dropdown-menu dropup show"
-    } else {
-        dropUpElement.classList.remove("show")
-    }
 
     if(typing == false) {
         typing = true
@@ -82,13 +44,40 @@ document.getElementById("m").addEventListener("input", function() {
             timeout = setTimeout(timeoutFunction, 1000);
         }
     }
-})
+}
+
+function shortCommmand() {
+    let messageField = document.getElementById("m").value
+    
+    if (/^[/]/.test(messageField) && messageField.length === 1) {
+        dropUpElement.className = "dropdown-menu dropup show"
+    } else {
+        dropUpElement.classList.remove("show")
+    }
+}
 
 function clearInputField() {
     dropUpElement.classList.remove("show")
     document.getElementById("m").value = ""
+    stillTyping();
 }
 
+function scrollBottom() {
+    var log = $('.messageContainer');
+    log.scrollTop(log.prop("scrollHeight"));
+}
+
+function buttonStatus() {
+    let messageField = document.getElementById("m").value
+  
+    if (messageField.length) {
+        sendButton.className = "btn btn-primary"
+        sendButton.disabled = false;
+    } else {
+        sendButton.className = "btn btn-primary disabled"
+        sendButton.disabled = true;
+    }
+}
 
 function getGIF() {
     // axios.get('https://api.yomomma.info/')
@@ -112,7 +101,53 @@ function getJoke() {
     });
     clearInputField();
 }
+
     
+
+socket.on('chat message', function(msg){
+    const linkElement = document.createElement("li")
+
+    linkElement.innerHTML = msg
+    messageContainer.appendChild(linkElement)
+    stillTyping();
+    scrollBottom();
+    buttonStatus();
+});
+
+socket.on('connected user', function() {
+    const linkElement = document.createElement("li")
+
+    linkElement.innerHTML = "Random user has connected."
+    messageContainer.appendChild(linkElement)
+
+    scrollBottom();
+});
+socket.on('disconnected user', function() {
+    const linkElement = document.createElement("li")
+
+    linkElement.innerHTML = "Random user has disconnected."
+    messageContainer.appendChild(linkElement)
+
+    scrollBottom();
+});
+
+socket.on('typing', function(typing){
+    const typingContainer = document.getElementById("typing");
+    if (typing) {
+        typingContainer.innerHTML = "Någon skriver...";
+    } else {
+        typingContainer.innerHTML = "";
+    }
+});
+
+socket.on('joke', function(joke){
+    const linkElement = document.createElement("li")
+
+    linkElement.innerHTML = joke
+    messageContainer.appendChild(linkElement)
+
+    scrollBottom();
+});
 
 
 
