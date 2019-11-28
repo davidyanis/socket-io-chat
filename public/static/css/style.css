@@ -42,9 +42,15 @@ button {
     border-radius: 1.3em;
     color: #000;
     margin-top: 1em;
+    margin-bottom: 1em;
     list-style-type: none;
     font-size: 14px;
     padding: 6px 12px 7px;
+}
+
+#messages img {
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 #m {
