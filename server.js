@@ -61,18 +61,18 @@ app.get('/gif', function(req, res){
 io.on('connection', function(socket){
     console.log('a user connected');
 
-    
-
-
-    socket.on('disconnect', function(){
-        console.log('user disconnected');
-        socket.broadcast.emit('disconnected user', socket.nickname);
-    });
-
     socket.on('userNickName', function(inputNickName){
       socket.nickname = inputNickName;
       socket.broadcast.emit('connected user', socket.nickname);
+      
     })
+    
+    socket.on('disconnect', function(inputNickName){
+        console.log('user disconnected');
+        nickname = inputNickName;
+        socket.broadcast.emit('disconnected user', socket.nickname);
+    });
+
 
     socket.on('chat message', function(msg){
         console.log('message: ' +msg + socket.nickname);
@@ -80,7 +80,7 @@ io.on('connection', function(socket){
     });
 
     socket.on('typing', function(typing){
-        console.log('Någon skriver..' + typing + socket.nickname);
+        console.log('Någon skriver..' + typing + " " + socket.nickname);
         io.emit('typing', typing, socket.nickname);
     });
 
