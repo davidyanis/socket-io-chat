@@ -5,14 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Socket io chat</title>
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
-<body>
-    <ul id="messages"></ul>
-    <form>
-        <input id="m" autocomplete="off" />
-        <button>Send</button>
-    </form>    
+<body onload="initSite()">
+    <main>
+        <section class="messageContainer">
+            <div id="messages"></div>
+        </section>
+        <form action="" onsubmit="sendChat(event)">
+            <div id="typing"></div>
+            <div class="sendMessageContainer">
+                    <div class="btn-group dropup">
+                            <div class="dropdown-menu">
+                            <!-- Dropdown menu links -->
+                                <a class="dropdown-item" onclick="getGIF()" href="#">Gif</a>
+                                <a class="dropdown-item" onclick="getJoke()" href="#">Skratta</a>
+                                <a class="dropdown-item" href="#">Lämna rum</a>
+                            </div>
+                        </div>
+                <input id="m" autocomplete="off" placeholder="Skriv ett meddelande" autofocus/>
+                <button type="submit" id="sendButton" class="btn btn-primary disabled">Skicka</button>
+            </div>
+        </form>
+        <div id="initialtChatModal">
+            <div id="modalContent">
+                <form>
+                    <p>För att starta webbchatten skriv in ett smeknamn</p>
+                    <div class="input-group mb-3">
+                        <input class="form-control" id="chatUser" type="text" name="chatUser" placeholder="Skriv in alias här" autofocus>
+                        <div class="input-group-append">
+                            <button class="btn btn-success" id="nickButton" type="submit" onclick="saveNickname(event)">Spara</button>
+                        </div>
+                    </div>  
+                </form>
+            </div>
+        </div>    
+    </main>
+    
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/static/script/script.js"></script>
 </body>
