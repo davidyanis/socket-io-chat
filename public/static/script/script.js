@@ -115,6 +115,7 @@ function displayModal() {
     modalContent.style.display = "block";
 }
 
+var inputAutoFocus = document.getElementById("m");
 function saveNickname(event){
     event.preventDefault();
     let inputNickName = document.getElementById("chatUser").value;
@@ -131,6 +132,8 @@ function saveNickname(event){
         alert(response.data);
         modal.style.display = "none";
         modalContent.style.display = "none";
+        inputAutoFocus.focus();
+
     }
     })
     .catch(function (error) {
