@@ -81,7 +81,7 @@ io.on('connection', function(socket){
 
     socket.on('typing', function(typing){
         console.log('Någon skriver..' + typing + socket.nickname);
-        io.emit('typing', typing, socket.nickname);
+        socket.broadcast.emit('typing user', typing, socket.nickname);
     });
 
     socket.on('joke', function(joke){

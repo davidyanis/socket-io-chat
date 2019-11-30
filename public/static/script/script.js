@@ -174,7 +174,7 @@ socket.on('disconnected user', function(nickname) {
 });
 
 
-socket.on('typing', function(typing, nickname){
+socket.on('typing user', function(typing, nickname){
     const typingContainer = document.getElementById("typing");
     if (typing) {
         typingContainer.innerHTML = nickname + " skriver...";
