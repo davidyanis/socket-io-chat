@@ -112,5 +112,14 @@ button {
     border-radius: 0.5rem;
 }
 
+#sideBar{
+    margin-top: 5em;
+    border-radius: 1em;
+    background-color: rgb(117, 152, 216);
+    position: relative;
+    height: 40em;
+    padding: 2em;  
+}
+
 
 

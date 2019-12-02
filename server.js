@@ -22,6 +22,7 @@ app.get('/', function(req, res){
 
 var nickname;
 var chatNickName = []
+var chatRooms = []
 
 app.post('/addNick', function (req, res) {
  
@@ -75,7 +76,13 @@ io.on('connection', function(socket){
     console.log(room, password);
     if(room.length >= 1 && password.length >= 1){
       socket.join(room);
-      /* socket.to(room).emit('some event'); */
+
+      chatRooms.push(
+        {
+          room: room
+        }
+      )
+      io.emit('create', chatRooms);
       socket.room = room
     }
   })

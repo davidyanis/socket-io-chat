@@ -10,6 +10,11 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body onload="initSite()">
+    <div id="sideBar">
+        <h3>Alla rum på chatten 🔞</h3><br>
+        <p>Tillgängliga rum att joina ✅</p>
+        <div id="allRooms"></div>
+    </div>
     <main>
         <section class="messageContainer">
             <div id="messages"></div>
@@ -32,7 +37,7 @@
         <div id="initialtChatModal">
             <div id="modalContent">
                 <form>
-                    <p>Fyll i uppgifterna för att joina ett rum</p>
+                    <p>Fyll i uppgifterna för att skapa ett rum</p>
                     <label>Skriv in ett smeknamn</label>
                     <input class="form-control" id="chatUser" type="text" name="chatUser" placeholder="Skriv in alias här" autofocus><br>
                     <label>Skapa ett rum</label>

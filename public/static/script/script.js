@@ -116,6 +116,7 @@ function displayModal() {
 }
 
 var inputAutoFocus = document.getElementById("m");
+
 function saveNickname(event){
     event.preventDefault();
     let inputNickName = document.getElementById("chatUser").value;
@@ -150,7 +151,21 @@ function saveNickname(event){
     });
 }
 
-
+socket.on('create', function(chatRooms){
+    console.log(chatRooms);
+    if(chatRooms.length){
+        const roomContainer = document.getElementById("allRooms");
+        roomContainer.innerHTML = "";
+    }
+    for (var i = 0; i < chatRooms.length; i++){
+        const roomContainer = document.getElementById("allRooms");
+        const linkElement = document.createElement("li");
+    
+        linkElement.innerHTML = chatRooms[i].room;
+        roomContainer.appendChild(linkElement);
+    }
+    
+});
 
 socket.on('chat message', function(msg, nickname){
     const messageContainer = document.getElementById("messages");
