@@ -32,13 +32,16 @@
         <div id="initialtChatModal">
             <div id="modalContent">
                 <form>
-                    <p>För att starta webbchatten skriv in ett smeknamn</p>
-                    <div class="input-group mb-3">
-                        <input class="form-control" id="chatUser" type="text" name="chatUser" placeholder="Skriv in alias här" autofocus>
-                        <div class="input-group-append">
-                            <button class="btn btn-success" id="nickButton" type="submit" onclick="saveNickname(event)">Spara</button>
-                        </div>
-                    </div>  
+                    <p>Fyll i uppgifterna för att joina ett rum</p>
+                    <label>Skriv in ett smeknamn</label>
+                    <input class="form-control" id="chatUser" type="text" name="chatUser" placeholder="Skriv in alias här" autofocus><br>
+                    <label>Skapa ett rum</label>
+                    <input class="form-control" id="chatRoomName" type="text" name="chatRoomName" placeholder="Skriv in namnet på rummet här"><br>
+                    <label>Skapa ett lösenord</label>
+                    <input class="form-control" id="chatRoomPass" type="password" name="chatRoomPass" placeholder="Skriv in ett lösenord till rummet"><br>
+                    <div class="input-group-append float-right">
+                        <button class="btn btn-success" id="nickButton" type="submit" onclick="saveNickname(event)">Spara</button>
+                    </div>
                 </form>
             </div>
         </div>    

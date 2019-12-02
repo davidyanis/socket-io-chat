@@ -24,20 +24,31 @@ var nickname;
 var chatNickName = []
 
 app.post('/addNick', function (req, res) {
-  for(var i = 0; i < chatNickName.length; i++){
-    if(req.body.name == chatNickName[i].alias) {
-      res.send({ message: "Namnet är upptaget, välj något annat! 😇"}, 403);
-      return
+ 
+  if (!req.body.pass || !req.body.room || req.body.rom && !req.body.pass || !req.body.room && req.body.pass ) {
+    console.log("Rum och lösenord är skapat");
+    res.status(403).send({message: "Skriv in ett rum och lösenord 😇" });
+    /* res.send({ message: "Skriv in ett rum och lösenord 😇"}, 403); */
+
+    return
+  } else {
+    for(var i = 0; i < chatNickName.length; i++){
+      if(req.body.name == chatNickName[i].alias) {
+        res.status(403).send({ message: "Namnet är upptaget, välj något annat! 😇"});
+        return
+      }
     }
+    chatNickName.push(
+      {
+        alias: req.body.name
+      }
+    )
+    res.send("Du har skapat ett alias");
+
   }
-  chatNickName.push(
-    {
-      alias: req.body.name
-    }
-  )
-  res.send("Du har skapat ett alias");
 
 })
+
 app.get('/joke', function(req, res){
     axios.get('https://api.yomomma.info/')
     .then(function (response) {
@@ -59,29 +70,37 @@ app.get('/gif', function(req, res){
 });
 
 io.on('connection', function(socket){
-    console.log('a user connected');
+
+  socket.on('create', function(room, password){
+    console.log(room, password);
+    if(room.length >= 1 && password.length >= 1){
+      socket.join(room);
+      /* socket.to(room).emit('some event'); */
+      socket.room = room
+    }
+  })
 
     socket.on('userNickName', function(inputNickName){
       socket.nickname = inputNickName;
-      socket.broadcast.emit('connected user', socket.nickname);
+      io.to(socket.room).emit('connected user', socket.nickname);
       
     })
     
     socket.on('disconnect', function(inputNickName){
         console.log('user disconnected');
         nickname = inputNickName;
-        socket.broadcast.emit('disconnected user', socket.nickname);
+        io.to(socket.room).emit('disconnected user', socket.nickname);
     });
 
 
     socket.on('chat message', function(msg){
-        console.log('message: ' +msg + socket.nickname);
-        io.emit('chat message', msg, socket.nickname);
+        console.log(socket.nickname + ' message: ' + msg);
+        io.to(socket.room).emit('chat message', msg, socket.nickname);
     });
 
     socket.on('typing', function(typing){
         console.log('Någon skriver..' + typing + " " + socket.nickname);
-        io.emit('typing', typing, socket.nickname);
+        io.to(socket.room).emit('typing', typing, socket.nickname);
     });
 
     socket.on('joke', function(joke){

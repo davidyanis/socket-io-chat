@@ -119,20 +119,29 @@ var inputAutoFocus = document.getElementById("m");
 function saveNickname(event){
     event.preventDefault();
     let inputNickName = document.getElementById("chatUser").value;
+    let inputRoomName = document.getElementById("chatRoomName").value;
+    let inputRoomPass = document.getElementById("chatRoomPass").value;
+
     if(inputNickName.length <= 2){
         alert("Alias måste innehålla minst 3 karaktärer");
         return
     }
+ 
+    
     socket.emit('userNickName', inputNickName);
     axios.post('/addNick', {
-        name: inputNickName
+        name: inputNickName,
+        room: inputRoomName,
+        pass: inputRoomPass
     })
     .then(function (response) {
     if(response.status == 200){
         alert(response.data);
         modal.style.display = "none";
         modalContent.style.display = "none";
-        inputAutoFocus.focus();
+        inputAutoFocus.focus(); 
+
+        socket.emit('create', inputRoomName, inputRoomPass);
 
     }
     })
