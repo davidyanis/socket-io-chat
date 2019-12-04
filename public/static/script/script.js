@@ -105,7 +105,32 @@ function getJoke() {
     clearInputField();
 }
 
-    
+var modalRoom = document.getElementById("initialtChatModalRoom");
+var modalContentRoom = document.getElementById("enterRoomModal");
+
+var inputAutoFocusRoom = document.getElementById("inputRoomPass");
+
+function joinTheRoom(){
+    console.log("Det går att klicka");
+    modalRoom.style.display = "block";
+    modalContentRoom.style.display = "block";
+    inputAutoFocusRoom.focus();
+}
+
+function noModal(){
+    document.getElementById("initialtChatModalRoom").style.display = "none";
+    document.getElementById("enterRoomModal").style.display = "none";
+    console.log("stänger modalen");
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+    modalRoom.addEventListener("click", noModal, true);
+});
+
+function enterAndPass(event){
+    event.preventDefault();
+    console.log("Man får vara medlem!");
+}
 
 var modal = document.getElementById("initialtChatModal");
 var modalContent = document.getElementById("modalContent");
@@ -161,8 +186,10 @@ socket.on('create', function(chatRooms){
         const roomContainer = document.getElementById("allRooms");
         const linkElement = document.createElement("li");
     
-        linkElement.innerHTML = chatRooms[i].room;
+        linkElement.innerHTML = "✅ " + chatRooms[i].room + "<br><br>";
         roomContainer.appendChild(linkElement);
+
+        linkElement.onclick = joinTheRoom;
     }
     
 });

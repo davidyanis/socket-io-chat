@@ -12,8 +12,22 @@
 <body onload="initSite()">
     <div id="sideBar">
         <h3>Alla rum på chatten 🔞</h3><br>
-        <p>Tillgängliga rum att joina ✅</p>
+        <p>Tillgängliga rum att joina</p>
         <div id="allRooms"></div>
+        <div id="initialtChatModalRoom"></div>
+
+        <div id="enterRoomModal">
+            <form>
+                <h5>Joina rummet med rätt lösenord</h5>
+                <div class="input-group mb-3">
+                    <input id="inputRoomPass" class="form-control" type="password" name="inputRoomPass" placeholder="Lösenord till rummet" autofocus>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success" id="buttonRoomPass" type="submit" onclick="enterAndPass(event)">Joina</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
     </div>
     <main>
         <section class="messageContainer">

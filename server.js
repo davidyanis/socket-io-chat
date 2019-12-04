@@ -79,7 +79,8 @@ io.on('connection', function(socket){
 
       chatRooms.push(
         {
-          room: room
+          room: room,
+          password: password
         }
       )
       io.emit('create', chatRooms);
