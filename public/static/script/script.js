@@ -109,17 +109,20 @@ var modalRoom = document.getElementById("initialtChatModalRoom");
 var modalContentRoom = document.getElementById("enterRoomModal");
 
 var inputAutoFocusRoom = document.getElementById("inputRoomPass");
+var roomNameDisplay = document.getElementById("roomNameDisplay");
 
-function joinTheRoom(){
+function joinTheRoom(nickname){
     console.log("Det går att klicka");
+    console.log(nickname);
     modalRoom.style.display = "block";
     modalContentRoom.style.display = "block";
     inputAutoFocusRoom.focus();
+    roomNameDisplay.innerHTML = "Joina " + nickname + " med rätt lösenord";
 }
 
 function noModal(){
-    document.getElementById("initialtChatModalRoom").style.display = "none";
-    document.getElementById("enterRoomModal").style.display = "none";
+    modalRoom.style.display = "none";
+    modalContentRoom.style.display = "none";
     console.log("stänger modalen");
 }
 
@@ -130,6 +133,8 @@ window.addEventListener('DOMContentLoaded', function () {
 function enterAndPass(event){
     event.preventDefault();
     console.log("Man får vara medlem!");
+    /* roomNameDisplay.innerHTML = "Joina " + theUserChatRoom + " med rätt lösenord"; */
+
 }
 
 var modal = document.getElementById("initialtChatModal");
@@ -176,8 +181,10 @@ function saveNickname(event){
     });
 }
 
-socket.on('create', function(chatRooms){
+
+socket.on('create', function(chatRooms, nickname){
     console.log(chatRooms);
+    console.log(nickname);
     if(chatRooms.length){
         const roomContainer = document.getElementById("allRooms");
         roomContainer.innerHTML = "";
@@ -189,10 +196,18 @@ socket.on('create', function(chatRooms){
         linkElement.innerHTML = "✅ " + chatRooms[i].room + "<br><br>";
         roomContainer.appendChild(linkElement);
 
-        linkElement.onclick = joinTheRoom;
+        var theUserChatRoom = chatRooms[i].room
+        /* roomNameDisplay.innerHTML = "Joina " + theUserChatRoom + " med rätt lösenord"; */
+
+        //Test
+       linkElement.onclick = function() {joinTheRoom(nickname)};
+
+        // chatRooms[i].onclick = joinTheRoom;
     }
     
 });
+
+
 
 socket.on('chat message', function(msg, nickname){
     const messageContainer = document.getElementById("messages");

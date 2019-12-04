@@ -83,7 +83,7 @@ io.on('connection', function(socket){
           password: password
         }
       )
-      io.emit('create', chatRooms);
+      io.emit('create', chatRooms, socket.nickname);
       socket.room = room
     }
   })
