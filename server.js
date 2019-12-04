@@ -38,6 +38,7 @@ app.post('/addNick', function (req, res) {
   res.send("Du har skapat ett alias");
 
 })
+
 app.get('/joke', function(req, res){
     axios.get('https://api.yomomma.info/')
     .then(function (response) {
@@ -59,7 +60,7 @@ app.get('/gif', function(req, res){
 });
 
 io.on('connection', function(socket){
-    console.log('a user connected');
+    console.log(socket.id);
 
     
 
@@ -75,7 +76,7 @@ io.on('connection', function(socket){
     })
 
     socket.on('chat message', function(msg){
-        console.log('message: ' +msg + socket.nickname);
+        console.log('message: ' + msg + socket.nickname);
         io.emit('chat message', msg, socket.nickname);
     });
 
@@ -86,12 +87,12 @@ io.on('connection', function(socket){
 
     socket.on('joke', function(joke){
         console.log(joke);
-        io.emit('joke', joke);
+        io.emit('send joke', joke, socket.nickname);
     });
 
     socket.on('gif', function(gif){
         console.log(gif);
-        io.emit('gif', gif);
+        io.emit('gif', gif, socket.nickname);
     });
 
 });

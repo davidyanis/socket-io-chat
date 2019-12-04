@@ -4,6 +4,7 @@ let typing = false;
 let timeout = undefined;
 const dropUpElement = document.getElementsByClassName("dropdown-menu")[0]
 const messageContainer = document.getElementById("messages");
+const blue = document.getElementById("blueMessages");
 const sendButton = document.getElementById("sendButton")
 
 buttonStatus();
@@ -17,7 +18,7 @@ function sendChat(event) {
     const getMessage = document.getElementById("m");
     socket.emit('chat message', getMessage.value);
     getMessage.value = "";
-    return false;
+    stillTyping();
 };
 
 document.getElementById("m").addEventListener("input", function() {
@@ -141,21 +142,39 @@ function saveNickname(event){
 
 
 socket.on('chat message', function(msg, nickname){
-    const messageContainer = document.getElementById("messages");
-    const linkElement = document.createElement("li")
-    const pElement = document.createElement("p")
+    let inputNickName = document.getElementById("chatUser").value;
+   
+    if (nickname == inputNickName) {
+        const divElement = document.createElement("div");
+        const linkElement = document.createElement("li");
+        const pElement = document.createElement("p");
+        linkElement.className = "rightMsg";
+        divElement.style.float = "right";
 
-    pElement.innerHTML = nickname
-    linkElement.innerHTML = " " + msg
-    messageContainer.appendChild(pElement)
-    messageContainer.appendChild(linkElement)
-    stillTyping();
-    scrollBottom();
-    buttonStatus();
+        pElement.innerHTML = nickname;
+        linkElement.innerHTML = " " + msg;
+        divElement.appendChild(pElement);
+        divElement.appendChild(linkElement);
+        messageContainer.appendChild(divElement);
+        scrollBottom();
+        buttonStatus();
+    } else {
+        const divElement = document.createElement("div");
+        const linkElement = document.createElement("li");
+        const pElement = document.createElement("p");
+        linkElement.className = "leftMsg";
+
+        pElement.innerHTML = nickname;
+        linkElement.innerHTML = " " + msg;
+        divElement.appendChild(linkElement);
+        divElement.appendChild(pElement);
+        messageContainer.appendChild(divElement);
+        scrollBottom();
+        buttonStatus();
+    }
 });
 
 socket.on('connected user', function(nickname) {
-    const messageContainer = document.getElementById("messages");
     const linkElement = document.createElement("li")
 
     linkElement.innerHTML = nickname + " har anslutit till rummet."
@@ -164,12 +183,12 @@ socket.on('connected user', function(nickname) {
     scrollBottom();
 });
 socket.on('disconnected user', function(nickname) {
-    const messageContainer = document.getElementById("messages");
     const linkElement = document.createElement("li")
+    const typingContainer = document.getElementById("typing");
 
     linkElement.innerHTML = nickname + " har lämnat rummet."
     messageContainer.appendChild(linkElement)
-
+    typingContainer.innerHTML = "";
     scrollBottom();
 });
 
@@ -183,18 +202,24 @@ socket.on('typing user', function(typing, nickname){
     }
 });
 
-socket.on('joke', function(joke){
+socket.on('send joke', function(joke, nickname){
     const linkElement = document.createElement("li")
-
+    const pElement = document.createElement("p")
+    pElement.innerHTML = nickname
     linkElement.innerHTML = joke
+    messageContainer.appendChild(pElement)
     messageContainer.appendChild(linkElement)
+
+    scrollBottom();
 })
 
-socket.on('gif', function(gif){
+socket.on('gif', function(gif, nickname){
     const imgElement = document.createElement("img");
+    const pElement = document.createElement("p")
+    pElement.innerHTML = nickname
     imgElement.src = gif;
     imgElement.style.height = "10em"
-   
+    messageContainer.appendChild(pElement)
     messageContainer.appendChild(imgElement)
 
     scrollBottom();
