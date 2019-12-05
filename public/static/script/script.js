@@ -170,11 +170,15 @@ function saveNickname(event){
             inputMessage.focus(); 
 
             socket.emit('create', inputRoomName, inputRoomPass);
+
+            alert("OBS! Joina ett rum för att börja chatta");
         }
     })
     .catch(function (error) {
         alert(error.response.data.message);
     });
+
+   
 }
 
 let roomName;
