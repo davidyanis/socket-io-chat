@@ -224,34 +224,30 @@ socket.on('chat message', function(msg, nickname){
     let inputNickName = document.getElementById("chatUser").value;
    
     if (nickname == inputNickName) {
-        const divElement = document.createElement("div");
         const linkElement = document.createElement("li");
         const pElement = document.createElement("p");
         linkElement.className = "rightMsg";
-        divElement.style.float = "right";
 
         pElement.innerHTML = nickname;
         linkElement.innerHTML = " " + msg;
-        divElement.appendChild(pElement);
-        divElement.appendChild(linkElement);
-        messageContainer.appendChild(divElement);
+        messageContainer.appendChild(pElement);
+        messageContainer.appendChild(linkElement);
         scrollBottom();
         buttonStatus();
     } else {
-        const divElement = document.createElement("div");
         const linkElement = document.createElement("li");
         const pElement = document.createElement("p");
         linkElement.className = "leftMsg";
 
         pElement.innerHTML = nickname;
         linkElement.innerHTML = " " + msg;
-        divElement.appendChild(linkElement);
-        divElement.appendChild(pElement);
-        messageContainer.appendChild(divElement);
+        messageContainer.appendChild(pElement);
+        messageContainer.appendChild(linkElement);
         scrollBottom();
         buttonStatus();
     }
 });
+
 
 socket.on('connected user', function(nickname) {
     console.log(nickname)
@@ -284,8 +280,10 @@ socket.on('typing user', function(typing, nickname){
 });
 
 socket.on('send joke', function(joke, nickname){
-    const linkElement = document.createElement("li")
-    const pElement = document.createElement("p")
+    const linkElement = document.createElement("li");
+    const pElement = document.createElement("p");
+    linkElement.className = "rightMsg";
+
     pElement.innerHTML = nickname
     linkElement.innerHTML = joke
     messageContainer.appendChild(pElement)
@@ -293,10 +291,6 @@ socket.on('send joke', function(joke, nickname){
 
     scrollBottom();
 })
-
-socket.on('clickedRoom', function(nickname){
-    console.log(nickname)
-});
    
 socket.on('gif', function(gif, nickname){
     const imgElement = document.createElement("img");

@@ -52,8 +52,19 @@ button {
     margin-bottom: 1em;
 }
 
+#messages li {
+    background-color: #EAEBEE;
+    border-radius: 1.3em;
+    color: #000;
+    list-style-type: none;
+    padding: 0.5em;
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+    margin-bottom: 1em;
+}
+
 #messages .rightMsg {
-    background-color: rgb(38, 79, 201);
+    background-color: #007bff;
     border-radius: 1.3em;
     color: rgb(255, 255, 255);
     list-style-type: none;
@@ -71,11 +82,6 @@ button {
     font-size: 0.9em;
 }
 
-#messages img {
-    margin-top: 1em;
-    margin-bottom: 1em;
-}
-
 #m {
     border-bottom: none;
 }
@@ -90,13 +96,6 @@ button {
     width: 50%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-}
-
-#blueMessages {
-    display: flex;
-    flex-direction: column;
-    float: right;
     align-items: flex-start;
 }
 
