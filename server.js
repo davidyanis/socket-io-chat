@@ -87,7 +87,6 @@ io.on('connection', function(socket){
 
     socket.on('create', function(room, password){
         if(room.length >= 1 && password.length >= 1){
-        socket.join(room);
 
         chatRooms.push(
             {
@@ -101,7 +100,6 @@ io.on('connection', function(socket){
 
     socket.on('userNickName', function(inputNickName){
         socket.nickname = inputNickName;
-        console.log(inputNickName)
     })
     
     socket.on('disconnect', function(inputNickName){
@@ -110,19 +108,19 @@ io.on('connection', function(socket){
     });
 
     socket.on('chat message', function(msg){
-        io.emit('chat message', msg, socket.nickname);
+        io.to(socket.room).emit('chat message', msg, socket.nickname);
     });
 
     socket.on('typing', function(typing){
-        io.to(socket.room).emit('typing', typing, socket.nickname);
+        socket.broadcast.to(socket.room).emit('typing user', typing, socket.nickname);
     });
 
     socket.on('joke', function(joke){
-        io.emit('send joke', joke, socket.nickname);
+        io.to(socket.room).emit('send joke', joke, socket.nickname);
     });
 
     socket.on('gif', function(gif){
-        io.emit('gif', gif, socket.nickname);
+        io.to(socket.room).emit('gif', gif, socket.nickname);
     });
 
 
