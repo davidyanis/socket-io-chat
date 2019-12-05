@@ -162,4 +162,11 @@ button {
     border-radius: 0.5rem;
 }
 
+#activeRoom {
+    position: absolute;
+    margin-top: 1em;
+    left: 50%;
+    height: 2em;
+}
+
 
