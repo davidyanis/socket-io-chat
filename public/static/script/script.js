@@ -189,6 +189,16 @@ function roomClicked(event) {
     inputPassword.focus();
     inputPassword.className = "form-control " + roomName;
     roomNameDisplay.innerHTML = "Joina " + roomName + " med rätt lösenord";
+
+    displayActiveRoom(roomName);
+}
+
+function displayActiveRoom(roomName){
+    activeRoom = document.getElementById("activeRoom");
+    if(activeRoom.value){
+        activeRoom.innerHTML = ""
+    }
+    activeRoom.innerHTML = "Du befinner dig i rum: <u>" + roomName + "</u>  👀";
 }
 
 socket.on('chat message', function(msg, nickname){
