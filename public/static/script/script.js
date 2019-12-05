@@ -119,7 +119,21 @@ function enterAndPass(event){
     event.preventDefault();
     let password = inputPassword.value
     /* roomNameDisplay.innerHTML = "Joina " + theUserChatRoom + " med rätt lösenord"; */
-    socket.emit('clickedRoom', roomName, password);
+
+    axios.post('/roomAuth', {
+        roomName: roomName,
+        password: password,
+    })
+    .then(function (response) {
+        if(response.status == 200){
+            socket.emit('clickedRoom', roomName);
+            noModal();
+        }
+    })
+    .catch(function (error) {
+        alert(error.response.data.message);
+    });
+ 
 }
 
 var modal = document.getElementById("initialtChatModal");
@@ -136,7 +150,7 @@ function saveNickname(event){
     let inputRoomName = document.getElementById("chatRoomName").value;
     let inputRoomPass = document.getElementById("chatRoomPass").value;
 
-    if(inputNickName.length <= 2){
+    if(inputNickName.length <= 2) {
         alert("Alias måste innehålla minst 3 karaktärer");
         return
     }
@@ -206,11 +220,12 @@ socket.on('chat message', function(msg, nickname){
 });
 
 socket.on('connected user', function(nickname) {
+    console.log(nickname)
     const messageContainer = document.getElementById("messages");
-    const linkElement = document.createElement("li")
+    const linkElement = document.createElement("li");
 
-    linkElement.innerHTML = nickname + " har anslutit till rummet."
-    messageContainer.appendChild(linkElement)
+    linkElement.innerHTML = nickname + " har anslutit till rummet.";
+    messageContainer.appendChild(linkElement);
 
     scrollBottom();
 });
@@ -224,7 +239,6 @@ socket.on('disconnected user', function(nickname) {
     scrollBottom();
 });
 
-
 socket.on('typing', function(typing, nickname){
     const typingContainer = document.getElementById("typing");
     if (typing) {
@@ -232,6 +246,10 @@ socket.on('typing', function(typing, nickname){
     } else {
         typingContainer.innerHTML = "";
     }
+});
+
+socket.on('clickedRoom', function(nickname){
+    console.log(nickname)
 });
 
 socket.on('joke', function(joke){

@@ -41,7 +41,7 @@ app.post('/addNick', function (req, res) {
     }
 })
 
-app.get('/joke', function(req, res){
+app.get('/joke', function(req, res) {
     axios.get('https://api.yomomma.info/')
     .then(function (response) {
         res.send(response.data.joke)
@@ -61,15 +61,28 @@ app.get('/gif', function(req, res){
     });
 });
 
-io.on('connection', function(socket){
-    socket.on('clickedRoom', function(roomName, password){
-        for (var i = 0; i < chatRooms.length; i++) {
-            if (chatRooms[i].room === roomName && chatRooms[i].password === password) {
-                console.log("sant")
-            } else {
-                console.log("falskt")
-            }
+
+app.post('/roomAuth', function(req, res){
+    console.log("hej")
+    for (var i = 0; i < chatRooms.length; i++) {
+        if (chatRooms[i].room === req.body.roomName && chatRooms[i].password === req.body.password) {
+            res.send(200)
+        } else {
+            console.log("dit")
+            res.status(403).send({message: "OBS! Du har skrivit in fel lösenord. Vänligen försök igen." });
+            return
         }
+    }
+
+    
+});
+
+io.on('connection', function(socket){
+    socket.on('clickedRoom', function(roomName){
+        socket.room = roomName
+        socket.join(socket.room);
+        io.to(socket.room).emit('connected user', socket.nickname);
+      
     })
 
     socket.on('create', function(room, password){
@@ -83,13 +96,12 @@ io.on('connection', function(socket){
             }
         )
         io.emit('create', chatRooms, socket.nickname);
-        socket.room = room
         }
     })
 
     socket.on('userNickName', function(inputNickName){
         socket.nickname = inputNickName;
-        io.to(socket.room).emit('connected user', socket.nickname);
+        console.log(inputNickName)
     })
     
     socket.on('disconnect', function(inputNickName){
