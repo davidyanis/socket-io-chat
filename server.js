@@ -20,34 +20,25 @@ app.get('/', function(req, res){
   res.sendFile(path.join(__dirname+'/public/static/web/index.html'));
 });
 
-var nickname;
 var chatNickName = []
 var chatRooms = []
 
 app.post('/addNick', function (req, res) {
- 
-  if (!req.body.pass || !req.body.room || req.body.rom && !req.body.pass || !req.body.room && req.body.pass ) {
-    console.log("Rum och lösenord är skapat");
-    res.status(403).send({message: "Skriv in ett rum och lösenord 😇" });
-    /* res.send({ message: "Skriv in ett rum och lösenord 😇"}, 403); */
-
-    return
-  } else {
-    for(var i = 0; i < chatNickName.length; i++){
-      if(req.body.name == chatNickName[i].alias) {
-        res.status(403).send({ message: "Namnet är upptaget, välj något annat! 😇"});
+    if (!req.body.pass || !req.body.room || req.body.rom && !req.body.pass || !req.body.room && req.body.pass ) {
+        res.status(403).send({message: "Skriv in ett rum och lösenord 😇" });
         return
-      }
+    } else {
+        for(var i = 0; i < chatNickName.length; i++){
+            if(req.body.name == chatNickName[i].alias) {
+                res.status(403).send({ message: "Namnet är upptaget, välj något annat! 😇"});
+                return
+            }
+        }
+        chatNickName.push({
+            alias: req.body.name
+        })
+        res.send("Du har skapat ett alias");
     }
-    chatNickName.push(
-      {
-        alias: req.body.name
-      }
-    )
-    res.send("Du har skapat ett alias");
-
-  }
-
 })
 
 app.get('/joke', function(req, res){
@@ -71,53 +62,54 @@ app.get('/gif', function(req, res){
 });
 
 io.on('connection', function(socket){
-
-  socket.on('create', function(room, password){
-    console.log(room, password);
-    if(room.length >= 1 && password.length >= 1){
-      socket.join(room);
-
-      chatRooms.push(
-        {
-          room: room,
-          password: password
+    socket.on('clickedRoom', function(roomName, password){
+        for (var i = 0; i < chatRooms.length; i++) {
+            if (chatRooms[i].room === roomName && chatRooms[i].password === password) {
+                console.log("sant")
+            } else {
+                console.log("falskt")
+            }
         }
-      )
-      io.emit('create', chatRooms, socket.nickname);
-      socket.room = room
-    }
-  })
+    })
+
+    socket.on('create', function(room, password){
+        if(room.length >= 1 && password.length >= 1){
+        socket.join(room);
+
+        chatRooms.push(
+            {
+                room: room,
+                password: password
+            }
+        )
+        io.emit('create', chatRooms, socket.nickname);
+        socket.room = room
+        }
+    })
 
     socket.on('userNickName', function(inputNickName){
-      socket.nickname = inputNickName;
-      io.to(socket.room).emit('connected user', socket.nickname);
-      
+        socket.nickname = inputNickName;
+        io.to(socket.room).emit('connected user', socket.nickname);
     })
     
     socket.on('disconnect', function(inputNickName){
-        console.log('user disconnected');
         nickname = inputNickName;
         io.to(socket.room).emit('disconnected user', socket.nickname);
     });
 
-
     socket.on('chat message', function(msg){
-        console.log(socket.nickname + ' message: ' + msg);
         io.to(socket.room).emit('chat message', msg, socket.nickname);
     });
 
     socket.on('typing', function(typing){
-        console.log('Någon skriver..' + typing + " " + socket.nickname);
         io.to(socket.room).emit('typing', typing, socket.nickname);
     });
 
     socket.on('joke', function(joke){
-        console.log(joke);
         io.emit('joke', joke);
     });
 
     socket.on('gif', function(gif){
-        console.log(gif);
         io.emit('gif', gif);
     });
 

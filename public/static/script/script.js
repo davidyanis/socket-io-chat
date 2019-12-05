@@ -1,26 +1,30 @@
-
 const socket = io();
 let typing = false;
 let timeout = undefined;
 const dropUpElement = document.getElementsByClassName("dropdown-menu")[0]
 const messageContainer = document.getElementById("messages");
 const sendButton = document.getElementById("sendButton")
+const inputMessage = document.getElementById("inputMessage")
 
-buttonStatus();
+var modalRoom = document.getElementById("initialtChatModalRoom");
+var modalContentRoom = document.getElementById("enterRoomModal");
+
+var inputPassword = document.getElementById("inputRoomPass");
+var roomNameDisplay = document.getElementById("roomNameDisplay");
 
 function initSite(){
     displayModal();
+    buttonStatus();
 }
 
 function sendChat(event) {
     event.preventDefault(); // prevents page reloading
-    const getMessage = document.getElementById("m");
-    socket.emit('chat message', getMessage.value);
-    getMessage.value = "";
+    socket.emit('chat message', inputMessage.value);
+    inputMessage.value = "";
     return false;
 };
 
-document.getElementById("m").addEventListener("input", function() {
+inputMessage.addEventListener("input", function() {
     buttonStatus();
     shortCommmand();
     stillTyping();
@@ -32,8 +36,7 @@ function timeoutFunction(){
 }
 
 function stillTyping() {
-    let messageField = document.getElementById("m").value
-    let stillTyping = messageField.length;
+    let stillTyping = inputMessage.value.length;
 
     if(typing == false) {
         typing = true
@@ -50,9 +53,7 @@ function stillTyping() {
 }
 
 function shortCommmand() {
-    let messageField = document.getElementById("m").value
-    
-    if (/^[/]/.test(messageField) && messageField.length === 1) {
+    if (/^[/]/.test(inputMessage.value) && inputMessage.value.length === 1) {
         dropUpElement.className = "dropdown-menu dropup show"
     } else {
         dropUpElement.classList.remove("show")
@@ -61,7 +62,7 @@ function shortCommmand() {
 
 function clearInputField() {
     dropUpElement.classList.remove("show")
-    document.getElementById("m").value = ""
+    document.getElementById("inputMessage").value = ""
     stillTyping();
 }
 
@@ -71,7 +72,7 @@ function scrollBottom() {
 }
 
 function buttonStatus() {
-    let messageField = document.getElementById("m").value
+    let messageField = document.getElementById("inputMessage").value
   
     if (messageField.length) {
         sendButton.className = "btn btn-primary"
@@ -105,25 +106,9 @@ function getJoke() {
     clearInputField();
 }
 
-var modalRoom = document.getElementById("initialtChatModalRoom");
-var modalContentRoom = document.getElementById("enterRoomModal");
-
-var inputAutoFocusRoom = document.getElementById("inputRoomPass");
-var roomNameDisplay = document.getElementById("roomNameDisplay");
-
-function joinTheRoom(nickname){
-    console.log("Det går att klicka");
-    console.log(nickname);
-    modalRoom.style.display = "block";
-    modalContentRoom.style.display = "block";
-    inputAutoFocusRoom.focus();
-    roomNameDisplay.innerHTML = "Joina " + nickname + " med rätt lösenord";
-}
-
 function noModal(){
     modalRoom.style.display = "none";
     modalContentRoom.style.display = "none";
-    console.log("stänger modalen");
 }
 
 window.addEventListener('DOMContentLoaded', function () {
@@ -132,9 +117,9 @@ window.addEventListener('DOMContentLoaded', function () {
 
 function enterAndPass(event){
     event.preventDefault();
-    console.log("Man får vara medlem!");
+    let password = inputPassword.value
     /* roomNameDisplay.innerHTML = "Joina " + theUserChatRoom + " med rätt lösenord"; */
-
+    socket.emit('clickedRoom', roomName, password);
 }
 
 var modal = document.getElementById("initialtChatModal");
@@ -144,8 +129,6 @@ function displayModal() {
     modal.style.display = "block";
     modalContent.style.display = "block";
 }
-
-var inputAutoFocus = document.getElementById("m");
 
 function saveNickname(event){
     event.preventDefault();
@@ -157,57 +140,56 @@ function saveNickname(event){
         alert("Alias måste innehålla minst 3 karaktärer");
         return
     }
- 
-    
+
     socket.emit('userNickName', inputNickName);
+
     axios.post('/addNick', {
         name: inputNickName,
         room: inputRoomName,
         pass: inputRoomPass
     })
     .then(function (response) {
-    if(response.status == 200){
-        alert(response.data);
-        modal.style.display = "none";
-        modalContent.style.display = "none";
-        inputAutoFocus.focus(); 
+        if(response.status == 200){
+            alert(response.data);
+            modal.style.display = "none";
+            modalContent.style.display = "none";
+            inputMessage.focus(); 
 
-        socket.emit('create', inputRoomName, inputRoomPass);
-
-    }
+            socket.emit('create', inputRoomName, inputRoomPass);
+        }
     })
     .catch(function (error) {
-    alert(error.response.data.message);
+        alert(error.response.data.message);
     });
 }
 
+let roomName;
 
-socket.on('create', function(chatRooms, nickname){
-    console.log(chatRooms);
-    console.log(nickname);
-    if(chatRooms.length){
+socket.on('create', function(chatRooms){
+    if(chatRooms.length) {
         const roomContainer = document.getElementById("allRooms");
         roomContainer.innerHTML = "";
     }
     for (var i = 0; i < chatRooms.length; i++){
         const roomContainer = document.getElementById("allRooms");
         const linkElement = document.createElement("li");
-    
+        linkElement.className = chatRooms[i].room
+        linkElement.setAttribute("onclick","roomClicked(event)");
+
         linkElement.innerHTML = "✅ " + chatRooms[i].room + "<br><br>";
         roomContainer.appendChild(linkElement);
-
-        var theUserChatRoom = chatRooms[i].room
-        /* roomNameDisplay.innerHTML = "Joina " + theUserChatRoom + " med rätt lösenord"; */
-
-        //Test
-       linkElement.onclick = function() {joinTheRoom(nickname)};
-
-        // chatRooms[i].onclick = joinTheRoom;
     }
-    
 });
 
-
+function roomClicked(event) {
+    roomName = event.target.className;
+    
+    modalRoom.style.display = "block";
+    modalContentRoom.style.display = "block";
+    inputPassword.focus();
+    inputPassword.className = "form-control " + roomName;
+    roomNameDisplay.innerHTML = "Joina " + roomName + " med rätt lösenord";
+}
 
 socket.on('chat message', function(msg, nickname){
     const messageContainer = document.getElementById("messages");

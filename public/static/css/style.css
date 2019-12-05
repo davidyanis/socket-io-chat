@@ -6,20 +6,24 @@ body {
     margin: 0;
     display: flex;
     justify-content: center;
-    background-color: #000;
+    background-color: #EAEBEE;
 }
 
 main {
-    margin-top: 5em;
-    border-radius: 1em;
+    border-top-right-radius: 1em;
+    border-bottom-right-radius: 1em;
     background-color: #fff;
     position: relative;
     height: 40em;
     padding: 2em;
+
 }
 
 input {
-    border-radius: 0.3em;
+    border-top-left-radius: 0.6em;
+    border-bottom-left-radius: 0.6em;
+    padding-left: 1em;
+    background-color: #F2F2F2;
     border: none;
     outline: 0;
     width: 100%;
@@ -113,12 +117,15 @@ button {
 }
 
 #sideBar{
-    margin-top: 5em;
-    border-radius: 1em;
-    background-color: rgb(117, 152, 216);
+    border-top-left-radius: 1em;
+    border-bottom-left-radius: 1em;
+    background-color: rgb(255, 255, 255);
     position: relative;
     height: 40em;
     padding: 2em;  
+    overflow-y: scroll;
+    border-right: 1px solid rgb(224, 224, 224);
+    
 }
 
 #allRooms li {
@@ -148,8 +155,8 @@ button {
     top: 25em;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: black;
-    color: white;
+    background-color: rgb(231, 231, 231);
+    color: rgb(0, 0, 0);
     padding: 1rem 1.5rem;
     width: 24rem;
     border-radius: 0.5rem;
