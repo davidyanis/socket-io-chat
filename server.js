@@ -61,6 +61,10 @@ app.get('/gif', function(req, res){
     });
 });
 
+app.get('/leaveRoom', function(req, res) {
+    res.status(200).send({message: "Du har lämnat rummet."});
+});
+
 app.post('/roomAuth', function(req, res){
     let foundRoom = false;
     for (var i = 0; i < chatRooms.length; i++) {
@@ -73,7 +77,6 @@ app.post('/roomAuth', function(req, res){
     } else {
         res.status(403).send({message: "OBS! Du har skrivit in fel lösenord. Vänligen försök igen." });
     }
-
 });
 
 io.on('connection', function(socket){
@@ -110,6 +113,7 @@ io.on('connection', function(socket){
     });
 
     socket.on('typing', function(typing){
+        console.log(typing)
         socket.broadcast.to(socket.room).emit('typing user', typing, socket.nickname);
     });
 
@@ -121,7 +125,10 @@ io.on('connection', function(socket){
         io.to(socket.room).emit('gif', gif, socket.nickname);
     });
 
-
+    socket.on('leave', function(roomName){
+        socket.leave(roomName)
+        io.to(socket.room).emit('leaveRoom', socket.nickname);
+    });
 });
 
 http.listen(1337, function(){

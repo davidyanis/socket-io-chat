@@ -106,6 +106,16 @@ function getJoke() {
     clearInputField();
 }
 
+function leaveRoom() {
+    axios.get('/leaveRoom')
+    .then(function (response) {
+        socket.emit('leave', response.data.message, roomName);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+}
+
 function noModal(){
     modalRoom.style.display = "none";
     modalContentRoom.style.display = "none";
@@ -247,6 +257,9 @@ socket.on('chat message', function(msg, nickname){
         scrollBottom();
         buttonStatus();
     }
+
+  
+
 });
 
 
@@ -302,6 +315,16 @@ socket.on('gif', function(gif, nickname){
     messageContainer.appendChild(pElement)
     messageContainer.appendChild(imgElement)
 
+    scrollBottom();
+});
+
+socket.on('leaveRoom', function(nickname){
+    const linkElement = document.createElement("li")
+    const typingContainer = document.getElementById("typing");
+
+    linkElement.innerHTML = nickname + " har lämnat rummet."
+    messageContainer.appendChild(linkElement)
+    typingContainer.innerHTML = "";
     scrollBottom();
 });
 
