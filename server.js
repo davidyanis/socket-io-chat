@@ -125,9 +125,10 @@ io.on('connection', function(socket){
         io.to(socket.room).emit('gif', gif, socket.nickname);
     });
 
-    socket.on('leave', function(roomName){
-        socket.leave(roomName)
-        io.to(socket.room).emit('leaveRoom', socket.nickname);
+    socket.on('leave', function(message){
+        console.log(message)
+        socket.leave(socket.room)
+        io.emit('leaveRoom', message, socket.nickname);
     });
 });
 

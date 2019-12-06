@@ -21,7 +21,7 @@ function sendChat(event) {
     event.preventDefault(); // prevents page reloading
     socket.emit('chat message', inputMessage.value);
     inputMessage.value = "";
-    return false;
+    stillTyping();
 };
 
 inputMessage.addEventListener("input", function() {
@@ -72,9 +72,7 @@ function scrollBottom() {
 }
 
 function buttonStatus() {
-    let messageField = document.getElementById("inputMessage").value
-  
-    if (messageField.length) {
+    if (inputMessage.value.length) {
         sendButton.className = "btn btn-primary"
         sendButton.disabled = false;
     } else {
@@ -109,7 +107,7 @@ function getJoke() {
 function leaveRoom() {
     axios.get('/leaveRoom')
     .then(function (response) {
-        socket.emit('leave', response.data.message, roomName);
+        socket.emit('leave', response.data.message);
     })
     .catch(function (error) {
         console.log(error);
@@ -318,14 +316,16 @@ socket.on('gif', function(gif, nickname){
     scrollBottom();
 });
 
-socket.on('leaveRoom', function(nickname){
-    const linkElement = document.createElement("li")
-    const typingContainer = document.getElementById("typing");
+socket.on('leaveRoom', function(message, nickname){
+    let storeNickName = nickname
+    let inputNickName = document.getElementById("chatUser").value;
+    if (storeNickName === inputNickName) {
+        alert(message);
+        clearInputField();
+        messageContainer.innerHTML = "";
+        buttonStatus();
+    }
 
-    linkElement.innerHTML = nickname + " har lämnat rummet."
-    messageContainer.appendChild(linkElement)
-    typingContainer.innerHTML = "";
-    scrollBottom();
 });
 
 
