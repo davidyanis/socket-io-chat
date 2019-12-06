@@ -118,7 +118,6 @@ window.addEventListener('DOMContentLoaded', function () {
 function enterAndPass(event){
     event.preventDefault();
     let password = inputPassword.value
-    /* roomNameDisplay.innerHTML = "Joina " + theUserChatRoom + " med rätt lösenord"; */
 
     axios.post('/roomAuth', {
         roomName: roomName,
@@ -212,7 +211,6 @@ function roomClicked(event) {
     inputPassword.className = "form-control " + roomName;
     roomNameDisplay.innerHTML = "Joina " + roomName + " med rätt lösenord";
 
-    /* displayActiveRoom(roomName); */
 }
 
 function displayActiveRoom(roomName){
@@ -253,7 +251,6 @@ socket.on('chat message', function(msg, nickname){
 
 
 socket.on('connected user', function(nickname) {
-    console.log(nickname)
     const messageContainer = document.getElementById("messages");
     const linkElement = document.createElement("li");
 
