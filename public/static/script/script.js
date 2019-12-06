@@ -227,7 +227,6 @@ function displayActiveRoom(roomName){
     activeRoom.style.padding = "0.5em";
     activeRoom.style.color = "#fff";
     activeRoom.style.borderRadius = "0.7em";
-    activeRoom
     if(activeRoom.value){
         activeRoom.innerHTML = ""
     }
