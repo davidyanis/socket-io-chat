@@ -2,7 +2,7 @@
 
 ## This app is built with node.js, express, axios.
 
-### In this project there are two diffrent API:s and one REST-API. By typing "/" in the inputfield you are able to choosie one api of your choise and it will display depending on the choise. Ex a joke(Yo Mama), giff(random catgif) or leave the room(REST-API). 
+### In this project there are two diffrent API:s and one REST-API. By typing "/" in the inputfield you are able to choosie one api of your choise and it will display depending on the choise. Ex a joke(Yo Mama), giff(random catgif) or leave the room(REST-API). Each time you enter the page, a form comes up where you have to enter a nickname, room name and password for the room.
 
 ### To run this app:
 1. Install dependencies with **npm install**
