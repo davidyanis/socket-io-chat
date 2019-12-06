@@ -223,10 +223,15 @@ function roomClicked(event) {
 
 function displayActiveRoom(roomName){
     activeRoom = document.getElementById("activeRoom");
+    activeRoom.style.background = "#000";
+    activeRoom.style.padding = "0.5em";
+    activeRoom.style.color = "#fff";
+    activeRoom.style.borderRadius = "0.7em";
+    activeRoom
     if(activeRoom.value){
         activeRoom.innerHTML = ""
     }
-    activeRoom.innerHTML = "Du befinner dig i rum: <u>" + roomName + "</u>  👀";
+    activeRoom.innerHTML = "Rum: " + roomName + "  👀";
 }
 
 socket.on('chat message', function(msg, nickname){
@@ -299,7 +304,7 @@ socket.on('send joke', function(joke, nickname){
     linkElement.innerHTML = joke
     messageContainer.appendChild(pElement)
     messageContainer.appendChild(linkElement)
-
+    buttonStatus();
     scrollBottom();
 })
    
@@ -311,7 +316,7 @@ socket.on('gif', function(gif, nickname){
     imgElement.style.height = "10em"
     messageContainer.appendChild(pElement)
     messageContainer.appendChild(imgElement)
-
+    buttonStatus();
     scrollBottom();
 });
 
