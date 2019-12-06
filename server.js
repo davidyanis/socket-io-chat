@@ -20,24 +20,27 @@ app.get('/', function(req, res){
   res.sendFile(path.join(__dirname+'/public/static/web/index.html'));
 });
 
-var nickname;
 var chatNickName = []
+var chatRooms = []
 
 app.post('/addNick', function (req, res) {
-  for(var i = 0; i < chatNickName.length; i++){
-    if(req.body.name == chatNickName[i].alias) {
-      res.send({ message: "Namnet är upptaget, välj något annat! 😇"}, 403);
-      return
+    if (!req.body.pass || !req.body.room || req.body.rom && !req.body.pass || !req.body.room && req.body.pass ) {
+        res.status(403).send({message: "Skriv in ett rum och lösenord 😇" });
+        return
+    } else {
+        for(var i = 0; i < chatNickName.length; i++){
+            if(req.body.name == chatNickName[i].alias) {
+                res.status(403).send({ message: "Namnet är upptaget, välj något annat! 😇"});
+                return
+            }
+        }
+        chatNickName.push({
+            alias: req.body.name
+        })
+        res.send("Du har skapat ett alias");
     }
-  }
-  chatNickName.push(
-    {
-      alias: req.body.name
-    }
-  )
-  res.send("Du har skapat ett alias");
-
 })
+
 app.get('/joke', function(req, res){
     axios.get('https://api.yomomma.info/')
     .then(function (response) {
@@ -58,42 +61,75 @@ app.get('/gif', function(req, res){
     });
 });
 
+app.get('/leaveRoom', function(req, res) {
+    res.status(200).send({message: "Du har lämnat rummet."});
+});
+
+app.post('/roomAuth', function(req, res){
+    let foundRoom = false;
+    for (var i = 0; i < chatRooms.length; i++) {
+        if (chatRooms[i].room === req.body.roomName && chatRooms[i].password === req.body.password) {
+            foundRoom = true
+        } 
+    }
+    if (foundRoom) {
+        res.status(200).send({message: "Grattis. Du är nu inne i rummet."});
+    } else {
+        res.status(403).send({message: "OBS! Du har skrivit in fel lösenord. Vänligen försök igen." });
+    }
+});
+
 io.on('connection', function(socket){
-    console.log('a user connected');
-
-    
-
-
-    socket.on('disconnect', function(){
-        console.log('user disconnected');
-        socket.broadcast.emit('disconnected user', socket.nickname);
-    });
-
-    socket.on('userNickName', function(inputNickName){
-      socket.nickname = inputNickName;
-      socket.broadcast.emit('connected user', socket.nickname);
+    socket.on('clickedRoom', function(roomName){
+        socket.room = roomName
+        socket.join(socket.room);
+        io.to(socket.room).emit('connected user', socket.nickname);
     })
 
+    socket.on('create', function(room, password){
+        if(room.length >= 1 && password.length >= 1){
+
+        chatRooms.push(
+            {
+                room: room,
+                password: password
+            }
+        )
+        io.emit('create', chatRooms, socket.nickname);
+        }
+    })
+
+    socket.on('userNickName', function(inputNickName){
+        socket.nickname = inputNickName;
+    })
+    
+    socket.on('disconnect', function(inputNickName){
+        nickname = inputNickName;
+        io.to(socket.room).emit('disconnected user', socket.nickname);
+    });
+
     socket.on('chat message', function(msg){
-        console.log('message: ' +msg + socket.nickname);
-        io.emit('chat message', msg, socket.nickname);
+        io.to(socket.room).emit('chat message', msg, socket.nickname);
     });
 
     socket.on('typing', function(typing){
-        console.log('Någon skriver..' + typing + socket.nickname);
-        io.emit('typing', typing, socket.nickname);
+        console.log(typing)
+        socket.broadcast.to(socket.room).emit('typing user', typing, socket.nickname);
     });
 
     socket.on('joke', function(joke){
-        console.log(joke);
-        io.emit('joke', joke);
+        io.to(socket.room).emit('send joke', joke, socket.nickname);
     });
 
     socket.on('gif', function(gif){
-        console.log(gif);
-        io.emit('gif', gif);
+        io.to(socket.room).emit('gif', gif, socket.nickname);
     });
 
+    socket.on('leave', function(message){
+        console.log(message)
+        socket.leave(socket.room)
+        io.emit('leaveRoom', message, socket.nickname);
+    });
 });
 
 http.listen(1337, function(){

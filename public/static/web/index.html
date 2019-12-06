@@ -10,6 +10,26 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body onload="initSite()">
+    <h5 id="activeRoom"></h5>
+    <div style="display: flex; margin-top: 5em; border-radius: 1.3em;  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);">
+    <div id="sideBar">
+        <h3>Alla rum på chatten 🔞</h3><br>
+        <p>Tillgängliga rum att joina</p>
+        <div id="allRooms"></div>
+        <div id="initialtChatModalRoom"></div>
+
+        <div id="enterRoomModal">
+            <form onsubmit="enterAndPass(event)">
+                <h5 id="roomNameDisplay"></h5>
+                <div class="input-group mb-3">
+                    <input id="inputRoomPass" class="form-control" type="password" name="inputRoomPass" placeholder="Lösenord till rummet" autofocus>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" id="buttonRoomPass" type="submit">Joina</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <main>
         <section class="messageContainer">
             <div id="messages"></div>
@@ -22,28 +42,31 @@
                             <!-- Dropdown menu links -->
                                 <a class="dropdown-item" onclick="getGIF()" href="#">Gif</a>
                                 <a class="dropdown-item" onclick="getJoke()" href="#">Skratta</a>
-                                <a class="dropdown-item" href="#">Lämna rum</a>
+                                <a class="dropdown-item" onclick="leaveRoom()" href="#">Lämna rum</a>
                             </div>
                         </div>
-                <input id="m" autocomplete="off" placeholder="Skriv ett meddelande" autofocus/>
+                <input id="inputMessage" autocomplete="off" placeholder="Skriv ett meddelande"/>
                 <button type="submit" id="sendButton" class="btn btn-primary disabled">Skicka</button>
             </div>
         </form>
         <div id="initialtChatModal">
             <div id="modalContent">
                 <form>
-                    <p>För att starta webbchatten skriv in ett smeknamn</p>
-                    <div class="input-group mb-3">
-                        <input class="form-control" id="chatUser" type="text" name="chatUser" placeholder="Skriv in alias här" autofocus>
-                        <div class="input-group-append">
-                            <button class="btn btn-success" id="nickButton" type="submit" onclick="saveNickname(event)">Spara</button>
-                        </div>
-                    </div>  
+                    <p>Fyll i uppgifterna för att skapa ett rum</p>
+                    <label>Skriv in ett smeknamn</label>
+                    <input class="form-control" id="chatUser" type="text" name="chatUser" placeholder="Skriv in alias här" autofocus><br>
+                    <label>Skapa ett rum</label>
+                    <input class="form-control" id="chatRoomName" type="text" name="chatRoomName" placeholder="Skriv in namnet på rummet här"><br>
+                    <label>Skapa ett lösenord</label>
+                    <input class="form-control" id="chatRoomPass" type="password" name="chatRoomPass" placeholder="Skriv in ett lösenord till rummet"><br>
+                    <div class="input-group-append float-right">
+                        <button class="btn btn-primary" id="nickButton" type="submit" onclick="saveNickname(event)">Spara</button>
+                    </div>
                 </form>
             </div>
         </div>    
     </main>
-    
+</div>
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
