@@ -129,6 +129,8 @@ function enterAndPass(event){
         if(response.status == 200){
             socket.emit('clickedRoom', roomName);
             noModal();
+            displayActiveRoom(roomName); 
+            inputMessage.focus(); 
         }
     })
     .catch(function (error) {
@@ -209,7 +211,7 @@ function roomClicked(event) {
     inputPassword.className = "form-control " + roomName;
     roomNameDisplay.innerHTML = "Joina " + roomName + " med rätt lösenord";
 
-    displayActiveRoom(roomName);
+    /* displayActiveRoom(roomName); */
 }
 
 function displayActiveRoom(roomName){
