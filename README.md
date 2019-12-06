@@ -1,8 +1,8 @@
 # Chat application with socket.io.
 
-##
+## This app is built with node.js, express, axios.
 
-### This app is built with node.js, express, axios.
+### In this project there are two diffrent API:s and one REST-API. By typing "/" in the inputfield you are able to choosie one api of your choise and it will display depending on the choise. Ex a joke(Yo Mama), giff(random catgif) or leave the room(REST-API). 
 
 ### To run this app:
 1. Install dependencies with **npm install**
