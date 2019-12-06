@@ -113,7 +113,6 @@ io.on('connection', function(socket){
     });
 
     socket.on('typing', function(typing){
-        console.log(typing)
         socket.broadcast.to(socket.room).emit('typing user', typing, socket.nickname);
     });
 
@@ -126,7 +125,6 @@ io.on('connection', function(socket){
     });
 
     socket.on('leave', function(message){
-        console.log(message)
         socket.leave(socket.room)
         io.emit('leaveRoom', message, socket.nickname);
     });
