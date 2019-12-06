@@ -1,7 +1,10 @@
 # Chat application with socket.io.
 
-Built with node.js
+##
 
+### This app is built with node.js, express, axios.
+
+### To run this app:
 1. Install dependencies with **npm install**
 2. Start server on **nodemon server.js**
 3. Server is running on **http://localhost:1337** :boom:
