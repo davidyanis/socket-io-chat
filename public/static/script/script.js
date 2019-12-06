@@ -3,7 +3,6 @@ let typing = false;
 let timeout = undefined;
 const dropUpElement = document.getElementsByClassName("dropdown-menu")[0]
 const messageContainer = document.getElementById("messages");
-const blue = document.getElementById("blueMessages");
 const sendButton = document.getElementById("sendButton")
 const inputMessage = document.getElementById("inputMessage")
 
@@ -136,6 +135,8 @@ function enterAndPass(event){
     .catch(function (error) {
         alert(error.response.data.message);
     });
+
+    messageContainer.innerHTML = "";
  
 }
 
